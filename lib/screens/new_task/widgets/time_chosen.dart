@@ -57,7 +57,8 @@ class TimeChosen extends StatelessWidget {
             ),
             const SizedBox(height: 10), // Add spacing between title and time
             Container(
-              width: 120,
+              width: 195,
+              height: 58,
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
               decoration: BoxDecoration(
                 color: Colors.grey[900], // Changed to proper grey color
@@ -65,13 +66,13 @@ class TimeChosen extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.access_time, color: Colors.purple, size: 18),
+                  const Icon(Icons.access_time, color: Colors.purple, size: 24),
                   const SizedBox(width: 8),
                   Text(
                     time.format(context),
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 16,
+                      fontSize: 18,
                     ),
                   ),
                 ],

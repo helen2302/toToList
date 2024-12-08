@@ -56,61 +56,63 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(Icons.arrow_back_ios, color: Colors.white),
+                      Icon(Icons.arrow_back_ios, color: AppColors.hexBA83DE),
                       Text(
                         "04 Mar - 11 Mar",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: TextStyle(color: AppColors.hexBA83DE, fontSize: 20),
                       ),
-                      Icon(Icons.arrow_forward_ios, color: Colors.white),
+                      Icon(Icons.arrow_forward_ios, color: AppColors.hexBA83DE),
                     ],
                   ),
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: List.generate(7, (index) {
-                      final isSelected = index == selectedDateIndex;
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(7, (index) {
+                        final isSelected = index == selectedDateIndex;
 
-                      return InkWell(
-                        onTap: () {
-                          setState(() {
-                            selectedDateIndex = index; // Update the selected date
-                          });
-                        },
-                        child: Column(
-                          children: [
-                            Text(
-                              daysOfWeek[index],
-                              style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.grey,
-                                fontSize: 20,
+                        return InkWell(
+                          onTap: () {
+                            setState(() {
+                              selectedDateIndex = index; // Update the selected date
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: isSelected ? Colors.transparent : Colors.transparent,
+                              border: Border.all(
+                                color: isSelected ? AppColors.hexBA83DE : Colors.transparent,
+                                width: 2,
                               ),
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            const SizedBox(height: 4),
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: isSelected
-                                    ? Colors.purple
-                                    : Colors.transparent,
-                                border: isSelected
-                                    ? Border.all(color: Colors.white)
-                                    : null,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                dates[index],
-                                style: TextStyle(
-                                  color:
-                                  isSelected ? Colors.white : Colors.grey,
+                            child: Column(
+                              children: [
+                                Text(
+                                  daysOfWeek[index],
+                                  style: TextStyle(
+                                    color: isSelected ? AppColors.hexBA83DE : Colors.grey,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                              ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  dates[index],
+                                  style: TextStyle(
+                                    color: isSelected ? AppColors.hexBA83DE : Colors.grey,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
-                    }),
+                          ),
+                        );
+                      }),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -121,9 +123,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                 const SizedBox(height: 16),
                 TextFormField(
                   style: const TextStyle(color: Colors.white),
+                  textAlignVertical: TextAlignVertical.top, // Aligns text to the top
                   decoration: InputDecoration(
                     labelText: "Name",
                     labelStyle: const TextStyle(color: Colors.grey),
+                    alignLabelWithHint: true, // Aligns the label with the hint text
                     filled: true,
                     fillColor: Colors.grey[900],
                     border: OutlineInputBorder(
@@ -135,9 +139,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                 const SizedBox(height: 16),
                 TextFormField(
                   style: const TextStyle(color: Colors.white),
+                  textAlignVertical: TextAlignVertical.top, // Aligns text to the top
                   decoration: InputDecoration(
                     labelText: "Description",
                     labelStyle: const TextStyle(color: Colors.grey),
+                    alignLabelWithHint: true, // Aligns the label with the hint text
                     filled: true,
                     fillColor: Colors.grey[900],
                     border: OutlineInputBorder(
@@ -206,22 +212,37 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle task creation
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50),
-                    backgroundColor: AppColors.hexDE83B0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xFFBA83DE), // Purple gradient start
+                        Color(0xFFCD83C6),
+                        Color(0xFFDE83B0), // Pink gradient end
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
                     ),
+                    borderRadius: BorderRadius.circular(16), // Rounded corners
                   ),
-                  child: const Text(
-                    'Create Task',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Handle task creation
+                    },
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 50),
+                      backgroundColor: Colors.transparent, // Transparent to show gradient
+                      shadowColor: Colors.transparent, // Remove shadow if needed
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      'Create Task',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ),

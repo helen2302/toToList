@@ -19,11 +19,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final tasks = <TaskModel>[
+  // List of Today's Tasks
+  final todayTasks = <TaskModel>[
     TaskModel(
       id: 1,
-      name: 'Mobile App Research',
-      description: 'Mobile App Research',
+      name: 'Prepare Wireframe for Main Flow',
+      description: 'Prepare Wireframe for Main Flow',
       startTime: DateTime.now(),
       endTime: DateTime.now(),
       date: DateTime.now(),
@@ -32,16 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
     TaskModel(
       id: 2,
-      name: 'Prepare Wireframe for Main Flow',
-      description: 'Prepare Wireframe for Main Flow',
-      startTime: DateTime.now(),
-      endTime: DateTime.now(),
-      date: DateTime.now(),
-      priority: TaskPriority.medium,
-      taskStatus: TaskStatus.complete,
-    ),
-    TaskModel(
-      id: 3,
       name: 'Prepare Screens',
       description: 'Prepare Screens',
       startTime: DateTime.now(),
@@ -52,42 +43,101 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   ];
 
+  // List of Tomorrow's Tasks
+  final tomorrowTasks = <TaskModel>[
+    TaskModel(
+      id: 3,
+      name: 'Website Research',
+      description: 'Research website tools',
+      startTime: DateTime.now().add(Duration(days: 1)),
+      endTime: DateTime.now().add(Duration(days: 1)),
+      date: DateTime.now().add(Duration(days: 1)),
+      priority: TaskPriority.medium,
+      taskStatus: TaskStatus.incomplete,
+    ),
+    TaskModel(
+      id: 4,
+      name: 'Prepare Wireframe for Main Flow',
+      description: 'Prepare Wireframe for Tomorrow',
+      startTime: DateTime.now().add(Duration(days: 1)),
+      endTime: DateTime.now().add(Duration(days: 1)),
+      date: DateTime.now().add(Duration(days: 1)),
+      priority: TaskPriority.high,
+      taskStatus: TaskStatus.incomplete,
+    ),
+    TaskModel(
+      id: 5,
+      name: 'Finalize Project Presentation',
+      description: 'Complete the final slides',
+      startTime: DateTime.now().add(Duration(days: 1)),
+      endTime: DateTime.now().add(Duration(days: 1)),
+      date: DateTime.now().add(Duration(days: 1)),
+      priority: TaskPriority.low,
+      taskStatus: TaskStatus.complete,
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.hex020206,
+      backgroundColor: Colors.black,
       appBar: HomeAppBar(
         onSearchChanged: (value) {
           debugPrint("Search text changed: $value");
         },
       ),
-      body: Column(
-        children: [
-          Header(title: 'Progress'),
-          Progress(),
-          Header(title: "Today's Task"),
-          Column(
-            children: tasks
-                .map(
-                  (taskModel) => TaskItem(
-                taskModel: taskModel,
-                onStatusChanged: (taskStatus) {
-                  final index = tasks.indexWhere(
-                        (e) => e.id == taskModel.id,
-                  );
-                  setState(() {
-                    tasks[index] = taskModel.copyWith(
-                      taskStatus: taskStatus,
-                    );
-                  });
-                },
-              ),
-            )
-                .toList(),
-          ),
-          const Header(title: "Tomorrow Task"),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Title Section
+            const SizedBox(height: 20),
+            // Progress Section
+            Progress(),
+            const SizedBox(height: 20),
+
+            // Today's Tasks
+            Header(title: "Today's Task"),
+            Column(
+              children: todayTasks
+                  .map(
+                    (taskModel) => TaskItem(
+                  taskModel: taskModel,
+                  onStatusChanged: (taskStatus) {
+                    final index = todayTasks.indexWhere((t) => t.id == taskModel.id);
+                    setState(() {
+                      todayTasks[index] = taskModel.copyWith(taskStatus: taskStatus);
+                    });
+                  },
+                ),
+              )
+                  .toList(),
+            ),
+
+            const SizedBox(height: 20),
+
+            // Tomorrow's Tasks
+            Header(title: "Tomorrow's Task"),
+            Column(
+              children: tomorrowTasks
+                  .map(
+                    (taskModel) => TaskItem(
+                  taskModel: taskModel,
+                  onStatusChanged: (taskStatus) {
+                    final index = tomorrowTasks.indexWhere((t) => t.id == taskModel.id);
+                    setState(() {
+                      tomorrowTasks[index] = taskModel.copyWith(taskStatus: taskStatus);
+                    });
+                  },
+                ),
+              )
+                  .toList(),
+            ),
+          ],
+        ),
       ),
+
+      // Floating Action Button
       floatingActionButton: AddButton(
         onTap: () {
           Navigator.of(context).push(
@@ -102,6 +152,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-
-
