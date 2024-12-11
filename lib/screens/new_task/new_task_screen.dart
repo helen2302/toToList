@@ -1,251 +1,243 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list_app/screens/new_task/widgets/priority_button.dart';
-import 'package:todo_list_app/screens/new_task/widgets/time_chosen.dart';
+import 'package:todo_list_app/screens/new_task/widgets/date_picker.dart';
+import 'package:todo_list_app/screens/new_task/widgets/input_field.dart';
+import 'package:todo_list_app/screens/new_task/widgets/priority_item.dart';
+import 'package:todo_list_app/screens/new_task/widgets/time_picker.dart';
+
+
+import '../../common_widgets/primary_app_bar.dart';
+import '../../common_widgets/primary_button.dart';
 import '../../constants/app_colors.dart';
 import '../../data/models/task_priority.dart';
 
+/// NewTaskScreen là một StatefulWidget để hiển thị màn hình tạo công việc mới
 class NewTaskScreen extends StatefulWidget {
+  /// Constructor của NewTaskScreen
   const NewTaskScreen({super.key});
 
+  /// Hàm createState tạo ra một State mới cho widget
   @override
-  State<StatefulWidget> createState() => _NewTaskScreenState();
+  State<NewTaskScreen> createState() => _NewTaskScreenState();
 }
 
+/// _NewTaskScreenState là một State của NewTaskScreen
 class _NewTaskScreenState extends State<NewTaskScreen> {
+  /// Mức ưu tiên được chọn
   TaskPriority? selectedTaskPriority;
+
+  /// Thời gian bắt đầu công việc
   TimeOfDay? startTime;
+
+  /// Thời gian kết thúc công việc
   TimeOfDay? endTime;
 
-  // State for dynamic date selection
-  int selectedDateIndex = 0; // Initially, select the first date (index 0)
-
+  /// Hàm build chứa nội dung của NewTaskScreen
   @override
   Widget build(BuildContext context) {
-    final daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    final dates = ['04', '05', '06', '07', '08', '09', '10'];
-
+    /// Dùng GestureDetector để bắt sự kiện khi người dùng chạm vào màn hình
     return GestureDetector(
       onTap: () {
+        /// Ẩn bàn phím khi người dùng chạm vào bất kỳ vị trí nào trên màn hình
         FocusScope.of(context).unfocus();
       },
-      child: Scaffold(
-        backgroundColor: AppColors.hex020206,
-        appBar: AppBar(
-          backgroundColor: AppColors.hex020206,
-          elevation: 0,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop(); // Go back to the previous screen
-            },
-            child: const Icon(Icons.arrow_back, color: Colors.white),
-          ),
-          title: const Text(
-            "Create new task",
-            style: TextStyle(color: Colors.white, fontSize: 25),
-          ),
-          centerTitle: true,
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 16),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(Icons.arrow_back_ios, color: AppColors.hexBA83DE),
-                      Text(
-                        "04 Mar - 11 Mar",
-                        style: TextStyle(color: AppColors.hexBA83DE, fontSize: 20),
-                      ),
-                      Icon(Icons.arrow_forward_ios, color: AppColors.hexBA83DE),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 20),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: List.generate(7, (index) {
-                        final isSelected = index == selectedDateIndex;
 
-                        return InkWell(
-                          onTap: () {
-                            setState(() {
-                              selectedDateIndex = index; // Update the selected date
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-                            decoration: BoxDecoration(
-                              color: isSelected ? Colors.transparent : Colors.transparent,
-                              border: Border.all(
-                                color: isSelected ? AppColors.hexBA83DE : Colors.transparent,
-                                width: 2,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Column(
-                              children: [
-                                Text(
-                                  daysOfWeek[index],
-                                  style: TextStyle(
-                                    color: isSelected ? AppColors.hexBA83DE : Colors.grey,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  dates[index],
-                                  style: TextStyle(
-                                    color: isSelected ? AppColors.hexBA83DE : Colors.grey,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ],
+      /// Trả về một Scaffold chứa nội dung của NewTaskScreen và AppBar
+      child: Scaffold(
+        /// Màu nền của Scaffold
+        backgroundColor: AppColors.hex020206,
+
+        /// AppBar của màn hình
+        appBar: PrimaryAppBar(
+          /// Tiêu đề của AppBar
+          title: 'Create new task',
+
+          /// Hàm được gọi khi người dùng nhấn nút back
+          onBack: () {
+            /// Đóng màn hình tạo công việc mới
+            Navigator.of(context).pop();
+          },
+        ),
+
+        /// Nội dung của màn hình
+        body: SingleChildScrollView(
+          /// Widget con của SingleChildScrollView
+          child: Padding(
+            /// Khoảng cách giữa các widget con
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+
+            /// Widget con của Padding
+            child: Column(
+              /// Canh lề của các widget con theo chiều ngang
+              crossAxisAlignment: CrossAxisAlignment.start,
+
+              /// Danh sách các widget con của Column
+              children: [
+                DatePicker(
+                  date: DateTime.now(),
+                  selectedDate: DateTime.now(),
+                  onDateChanged: (date) {},
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /// Khoảng cách giữa các widget con
+                      const SizedBox(
+                        /// Khoảng cách theo chiều dọc
+                        height: 24,
+                      ),
+
+                      /// Tiêu đề
+                      const Text(
+                        /// Hiển thị một đoạn văn bản
+                        "Schedule",
+
+                        /// Style của tiêu đề
+                        style: TextStyle(
+                          /// Kiểu chữ của tiêu đề
+                          color: Colors.white,
+
+                          /// Màu chữ của tiêu đề
+                          fontSize: 22,
+                        ),
+                      ),
+
+                      /// Khoảng cách giữa các widget con
+                      const SizedBox(
+                        /// Khoảng cách theo chiều dọc
+                        height: 16,
+                      ),
+
+                      /// InputField nhập tên công việc
+                      InputField(
+                        hintText: "Name",
+                        maxLines: 1,
+                        onChanged: (value) {},
+                      ),
+
+                      /// Khoảng cách giữa các widget con
+                      const SizedBox(
+                        /// Khoảng cách theo chiều dọc
+                        height: 16,
+                      ),
+
+                      /// InputField nhập mô tả công việc
+                      InputField(
+                        hintText: "Description",
+                        maxLines: 4,
+                        onChanged: (value) {},
+                      ),
+
+                      /// Khoảng cách giữa các widget con
+                      const SizedBox(
+                        /// Khoảng cách theo chiều dọc
+                        height: 16,
+                      ),
+
+                      /// Hiển thị thời gian bắt đầu và kết thúc công việc
+                      Row(
+                        /// Canh lề của các widget con theo chiều ngang
+                        children: [
+                          /// Mở rộng widget con theo chiều ngang
+                          Expanded(
+                            /// Hiển thị ô chọn thời gian
+                            child: TimePicker(
+                              /// Tiêu đề của TimePicker
+                              title: 'Start Time',
+
+                              /// Hàm được gọi khi người dùng thay đổi thời gian
+                              onTimeChanged: (time) {
+                                /// Cập nhật thời gian bắt đầu công việc
+                                setState(() {
+                                  startTime = time;
+                                });
+                              },
+
+                              /// Thời gian ban đầu của TimePicker
+                              time: startTime ?? TimeOfDay.now(),
                             ),
                           ),
-                        );
-                      }),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  "Schedule",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  style: const TextStyle(color: Colors.white),
-                  textAlignVertical: TextAlignVertical.top, // Aligns text to the top
-                  decoration: InputDecoration(
-                    labelText: "Name",
-                    labelStyle: const TextStyle(color: Colors.grey),
-                    alignLabelWithHint: true, // Aligns the label with the hint text
-                    filled: true,
-                    fillColor: Colors.grey[900],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  style: const TextStyle(color: Colors.white),
-                  textAlignVertical: TextAlignVertical.top, // Aligns text to the top
-                  decoration: InputDecoration(
-                    labelText: "Description",
-                    labelStyle: const TextStyle(color: Colors.grey),
-                    alignLabelWithHint: true, // Aligns the label with the hint text
-                    filled: true,
-                    fillColor: Colors.grey[900],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  maxLines: 3,
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TimeChosen(
-                        title: 'Start Time',
-                        time: startTime ?? TimeOfDay.now(),
-                        onTimeChanged: (time) {
+
+                          /// Khoảng cách giữa các widget con
+                          const SizedBox(
+                            /// Khoảng cách theo chiều ngang
+                            width: 11,
+                          ),
+
+                          /// Mở rộng widget con theo chiều ngang
+                          Expanded(
+                            /// Hiển thị ô chọn thời gian
+                            child: TimePicker(
+                              /// Thời gian ban đầu của TimePicker
+                              time: endTime ?? TimeOfDay.now(),
+
+                              /// Tiêu đề của TimePicker
+                              title: 'End Time',
+
+                              /// Hàm được gọi khi người dùng thay đổi thời gian
+                              onTimeChanged: (time) {
+                                /// Cập nhật thời gian kết thúc công việc
+                                setState(() {
+                                  endTime = time;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      /// Khoảng cách giữa các widget con
+                      const SizedBox(
+                        /// Khoảng cách theo chiều dọc
+                        height: 16,
+                      ),
+
+                      /// PriorityItem chọn mức ưu tiên của công việc
+                      PriorityItem(
+                        /// Mức ưu tiên được chọn
+                        selectedTaskPriority: selectedTaskPriority,
+
+                        /// Danh sách các mức ưu tiên
+                        taskPriorities: TaskPriority.values,
+
+                        /// Hàm được gọi khi người dùng thay đổi mức ưu tiên
+                        onTaskPriorityChanged: (taskPriority) {
+                          /// Cập nhật mức ưu tiên được chọn
                           setState(() {
-                            startTime = time;
+                            selectedTaskPriority = taskPriority;
                           });
                         },
                       ),
-                    ),
-                    const SizedBox(width: 11),
-                    Expanded(
-                      child: TimeChosen(
-                        title: 'End Time',
-                        time: endTime ?? TimeOfDay.now(),
-                        onTimeChanged: (time) {
-                          setState(() {
-                            endTime = time;
-                          });
+
+                      /// Khoảng cách giữa các widget con
+                      const SizedBox(
+                        /// Khoảng cách theo chiều dọc
+                        height: 16,
+                      ),
+
+                      /// Nút tạo công việc
+                      PrimaryButton(
+                        /// Tiêu đề của nút
+                        title: 'Create Task',
+
+                        /// Hàm được gọi khi người dùng nhấn vào nút
+                        onTap: () {
+                          /// Đóng màn hình tạo công việc mới
+                          Navigator.of(context).pop();
                         },
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                PriorityButton(
-                  selectedTaskPriority: selectedTaskPriority,
-                  priorityLevels: TaskPriority.values,
-                  onTaskPriorityChanged: (taskPriority) {
-                    setState(() {
-                      selectedTaskPriority = taskPriority;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Get alert for this task",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
+
+                      /// Khoảng cách giữa các widget con
+                      const SizedBox(
+                        /// Khoảng cách theo chiều dọc
+                        height: 16,
                       ),
-                    ),
-                    Switch(
-                      value: true,
-                      onChanged: (value) {
-                        // Handle toggle
-                      },
-                      activeColor: AppColors.hexA378FF,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFFBA83DE), // Purple gradient start
-                        Color(0xFFCD83C6),
-                        Color(0xFFDE83B0), // Pink gradient end
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-                    borderRadius: BorderRadius.circular(16), // Rounded corners
+                    ],
                   ),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Handle task creation
-                    },
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 50),
-                      backgroundColor: Colors.transparent, // Transparent to show gradient
-                      shadowColor: Colors.transparent, // Remove shadow if needed
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      'Create Task',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
+                )
               ],
             ),
           ),

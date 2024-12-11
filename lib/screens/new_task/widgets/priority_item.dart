@@ -3,38 +3,37 @@ import 'package:flutter/material.dart';
 import '../../../common_widgets/secondary_button.dart';
 import '../../../data/models/task_priority.dart';
 
-
-class PriorityButton extends StatelessWidget {
-  const PriorityButton({
+class PriorityItem extends StatelessWidget {
+  const PriorityItem({
     required this.selectedTaskPriority,
-    required this.priorityLevels,
+    required this.taskPriorities,
     required this.onTaskPriorityChanged,
     super.key,
   });
 
   final TaskPriority? selectedTaskPriority;
-  final List<TaskPriority> priorityLevels;
+  final List<TaskPriority> taskPriorities;
   final ValueChanged<TaskPriority> onTaskPriorityChanged;
 
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [];
 
-    for (int i = 0; i < priorityLevels.length; i++) {
+    for (int i = 0; i < taskPriorities.length; i++) {
       children.add(
         Expanded(
           child: SecondaryButton(
-            title: priorityLevels[i].title,
-            isSelected: selectedTaskPriority == priorityLevels[i],
-            color: priorityLevels[i].color,
+            title: taskPriorities[i].title,
+            isSelected: selectedTaskPriority == taskPriorities[i],
+            color: taskPriorities[i].color,
             onTap: () {
-              onTaskPriorityChanged.call(priorityLevels[i]);
+              onTaskPriorityChanged.call(taskPriorities[i]);
             },
           ),
         ),
       );
 
-      if (i < priorityLevels.length - 1) {
+      if (i < taskPriorities.length - 1) {
         children.add(const SizedBox(width: 10));
       }
     }
